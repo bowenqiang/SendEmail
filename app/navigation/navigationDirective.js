@@ -1,11 +1,11 @@
 (function () {
     'use strict';
 
-    var app = angular.module('myApp',[]);
-    app.directive('navigation', function (googleService) {
+    var app = angular.module('myApp');
+    app.directive('navigation', function () {
         return {
             templateUrl: "app/navigation/navigation.html",
-            controller: navigationController,
+            controller: "navigationController",
             controllerAs: 'navigation',
         }
     });
@@ -16,6 +16,7 @@
         console.log($location);
         self.$location = $location;
         $scope.login = function(){
+            
             googleService.handleAuthClick();
         }
 

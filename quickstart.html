@@ -149,8 +149,7 @@
       }
       function displayInbox() {
 
-          var request1 = gapi.client.oauth2.userinfo.get();
-          console.log("userinfo: "+request1);
+        
         var request = gapi.client.gmail.users.messages.list({
           'userId': 'me',
           'labelIds': 'INBOX',
@@ -162,6 +161,7 @@
               'userId': 'me',
               'id': this.id
             });
+            console.log(messageRequest);
             messageRequest.execute(appendMessageRow);
           });
         });

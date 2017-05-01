@@ -3,11 +3,8 @@
 
     angular
         .module('myApp')
-        .controller('homeController', ControllerCtrl)
+        .controller('homeController', ["googleService",function(googleService){
 
-    /** @ngInject */
-    function ControllerCtrl($scope){
-        var vm = this;
-    }
+        }]);
 
 }());
