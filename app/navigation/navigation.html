@@ -1,4 +1,4 @@
-<nav class="navbar navbar-inverse" ng>
+<nav class="navbar navbar-inverse" data-ng-init="init()">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -15,9 +15,9 @@
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
-        <li ng-hide="navigation.isLogin"><button class="btn btn-primary" ng-click="login()">Login</button></li>
+        <li ng-hide="navigation.isLogin"><button class="btn btn-primary" ng-click="login($event)">Login</button></li>
         <li class="dropdown" ng-hide="!navigation.isLogin">
-          <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{navigation.username}} <span class="caret"></span></a>
+          <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{navigation.userProfile['email']}} <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="#">Action</a></li>
             <li><a href="#">Another action</a></li>

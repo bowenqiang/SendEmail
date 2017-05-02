@@ -16,21 +16,22 @@
         //console.log($location);
         self.$location = $location;
         self.isLogin = false;
-        self.username = "Jack";
-        $window.onload = function(){
-            //alert("onload");
+        self.userProfile = {};
+        $scope.init = function(){
+            console.log("onload");
             googleService.handleClientLoad();
 
         };
-        $scope.login = function(){          
-            googleService.handleAuthClick();
+        $scope.login = function($event){          
+            googleService.handleAuthClick($event);
             //googleService.handleAuthClick();
+            self.userProfile = googleService.getBasicProfile();
             self.isLogin = true;
         }
 
         $scope.logout = function($event){
-            alert("logout");
-            googleService.handleSignoutClick();
+            console.log("logout");
+            googleService.handleSignoutClick($event);
             //TODO call logout service
             $event.preventDefault();
             self.isLogin = false;

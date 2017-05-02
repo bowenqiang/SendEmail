@@ -5,113 +5,88 @@
             // let clientId = '{CLIENT_ID}',
             //     apiKey = '{API_KEY}',
             //     scopes = '{SCOPES}';
+            let self = this;
             let clientId = '113580546624-h19v75qfojgcqt8bskd5d9utck254teq.apps.googleusercontent.com';
             let apiKey = 'AIzaSyCzhQV-jOIWWK_YS45Qtq8xxtCPELP9wWE';
-            let scopes =
-                'https://www.googleapis.com/auth/gmail.readonly ' +
-                'https://www.googleapis.com/auth/gmail.send';
+            let peopleApiDiscovery;
+            let scopes ='profile';
+            let GoogleUser = {};
 
-            let self = this;
-            self.handleClientLoad = function () {
-                gapi.client.setApiKey(apiKey);
-                self.initClient();
-                //window.setTimeout(self.checkAuth, 1);
-            };
+            self.handleClientLoad = function(){
+                console.log("handleClientLoad");
+                let loadGapiClient = new Promise(function(resolve,reject){
+                    gapi.load('client:auth2',resolve);
+                });
 
-            self.checkAuth = function () {
-                gapi.auth.authorize({
-                    client_id: clientId,
-                    scope: scopes,
-                    immediate: true
-                }, self.handleAuthResult);
-            };
+                let fetchPeopleApiDiscovery = fetch('people/people_rest_v1.json').then(
+                    function(resp){
+                        return resp.json();
+                    }).then(function(json){
+                        peopleApiDiscovery = json;
+                        return Promise.resolve();
+                    });
+                    Promise.all([loadGapiClient,fetchPeopleApiDiscovery]).then(self.initClient);
+            }
 
-            self.initClient = function () {
+            self.initClient = function(){
+                console.log("iniClient");
                 gapi.client.init({
-                    'apiKey': apiKey,
-                    //'discoveryDocs': [],
-                    'clientId': clientId,
-                    'scope': scopes
-                }).then(function () {
-                    gapi.auth2.getAuthInstance().isSingedIn.listen(updateSigninStatus);
-                    updateSigninStatus(gapi.auth2.getAuthInstance().isSingedIn.get());
-                    authorizeButton.onclick = self.handleAuthClick;
-                    signoutButton.onclick = self.handleSignoutClick;
-                });
-            };
+                    apiKey:apiKey,
+                    discoveryDocs:[peopleApiDiscovery],
+                    clientId: clientId,
+                    scope: scopes
+                }).then(function(){
+                    console.log("isSignedIn");
+                    gapi.auth2.getAuthInstance().isSignedIn.listen(self.updateSigninStatus);
 
-            self.updateSigninStatus = function(isSignedIn){
-                alert(isSignedIn);
+                    self.updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+
+                })
             }
 
-            self.handleAuthClick = function(event) {
-                gapi.auth2.getAuthInstance().signIn();
-            }
-            self.handleSignoutClick = function(event) {
-                gapi.auth2.getAuthInstance().signOut();
-            }
-
-            // self.handleAuthClick = function () {
-            //     gapi.auth.authorize({
-            //         client_id: clientId,
-            //         scope: scopes,
-            //         immediate: false
-            //     }, self.handleAuthResult);
-            //     return false;
-            // };
-
-            self.handleAuthResult = function (authResult) {
-                if (authResult && !authResult.error) {
-
-                    self.loadGmailApi();
-
+            self.updateSigninStatus = function(isSignedIn) {
+                console.log("updateSigninStatus");
+                console.log(isSignedIn);
+                if(isSignedIn){
+                    console.log("signin successfully");
+                    self.makeApiCall();
+                }else{
+                    console.log("failed to signin");
                 }
-            };
-
-            self.loadGmailApi = function () {
-                gapi.client.load('gmail', 'v1', self.displayInbox);
             }
 
-            self.displayInbox = function () {
+            self.handleAuthClick = function(event){
+                console.log("handleauthClick");
+                gapi.auth2.getAuthInstance().signIn();
+                GoogleUser = gapi.auth2.getAuthInstance().currentUser.get();
+            }
 
+            self.handleSignoutClick = function(event) {
+                console.log("handleSignoutClick");
+                gapi.auth2.getAuthInstance().signOut();
+                
+                gapi.auth2.getAuthInstance().disconnect();
+            }
 
-                // var request = gapi.client.gmail.users.messages.list({
-                //     'userId': 'me',
-                //     'labelIds': 'INBOX',
-                //     'maxResults': 10
-                // });
-                // request.execute(function (response) {
-                //     $.each(response.messages, function () {
-                //         var messageRequest = gapi.client.gmail.users.messages.get({
-                //             'userId': 'me',
-                //             'id': this.id
-                //         });
-                //         console.log(messageRequest);
-                //         //messageRequest.execute(appendMessageRow);
-                //     });
-                // });
+            self.makeApiCall = function(){
+                console.log("makeApiCall");
+            }
+
+            self.getBasicProfile = function(){
+                return {
+                    'id':GoogleUser.getBasicProfile().getId(),
+                    'name':GoogleUser.getBasicProfile().getName(),
+                    'givename':GoogleUser.getBasicProfile().getGivenName(),
+                    'familyname':GoogleUser.getBasicProfile().getFamilyName(),
+                    'imageurl':GoogleUser.getBasicProfile().getImageUrl(),
+                    'email':GoogleUser.getBasicProfile().getEmail()
+                };
             }
 
 
-            self.sendMessage = function (headers_obj, message, callback) {
-                console.log("sendMessage");
-                var email = '';
-                for (var header in headers_obj)
-                    email += header += ": " + headers_obj[header] + "\r\n";
-                email += "\r\n" + message;
-                console.log(email);
-                var sendRequest = gapi.client.gmail.users.messages.send({
-                    'userId': 'me',
-                    'resource': {
-                        'raw': window.btoa(email).replace(/\+/g, '-').replace(/\//g, '_')
-                    }
-                });
-                sendRequest.execute(callback)
-            }
+            
 
-            self.doneSending = function () {
-                alert("email is sented");
-            }
+            
 
 
 
