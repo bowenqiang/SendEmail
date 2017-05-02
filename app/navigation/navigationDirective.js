@@ -10,24 +10,26 @@
         }
     });
 
-    app.controller("navigationController", ["$scope", "$location","googleService", "dataFactory", function ($scope, $location,googleService,dataFactory) {
+    app.controller("navigationController", ["$scope", "$location","googleService", "$rootScope", "dataFactory", function ($scope, $location,googleService,$rootScope,dataFactory) {
         var self = this;
         //console.log(self);
         //console.log($location);
         self.$location = $location;
-        self.isLogin = false;
+        self.isLogin = false;  //Temp solution
         self.userProfile = {};
         $scope.init = function(){
             console.log("onload");
             googleService.handleClientLoad();
-
+            
         };
         $scope.login = function($event){          
             googleService.handleAuthClick($event);
             //googleService.handleAuthClick();
-            dataFactory.setProfile(googleService.getBasicProfile());
-            console.log("dataFactory:"+dataFactory["profile"]);
-            self.userProfile = dataFactory["profile"];
+            self.userProfile = googleService.getBasicProfile();
+
+            console.log("navi profile"+self.userProfile['email']);
+            
+            dataFactory.setProfile(self.userProfile);
             $event.preventDefault();
             self.isLogin = true;
         }
@@ -39,6 +41,7 @@
             $event.preventDefault();
             self.isLogin = false;
         }
+        //TO DO fix switchUser 
         $scope.switchUser = function($event){
             googleService.revokeAllScopes();
             $event.preventDefault();

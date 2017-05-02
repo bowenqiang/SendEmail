@@ -1,13 +1,14 @@
 <div class="row">
   <div class="col-md-8">
-    <form ng-submit="sendEmail()">
+    <form ng-submit="sendHandler()">
       <div class="modal-body">
         <div class="form-group">
           <input type="email" class="form-control" id="compose-to" placeholder="To" ng-model="home.email.To" required />
         </div>
 
         <div class="form-group">
-          <input type="text" class="form-control" id="compose-subject" placeholder="Subject" ng-model="home.email.Subject" required />
+          <input type="text" class="form-control" id="compose-subject" placeholder="Subject" ng-model="home.email.Subject" required
+          />
         </div>
 
         <div class="form-group">
@@ -22,13 +23,17 @@
 
   </div>
   <div class="col-md-4">
-    <h6>Contact List</h6>
-    <ul class="list-group">
-      <li class="list-group-item">Cras justo odio</li>
-      <li class="list-group-item">Dapibus ac facilisis in</li>
-      <li class="list-group-item">Morbi leo risus</li>
-      <li class="list-group-item">Porta ac consectetur ac</li>
-      <li class="list-group-item">Vestibulum at eros</li>
+    <button type="" id="load-local-button" class="btn btn-default" ng-click="loadLocalContact()">Load Contact</button>
+    <h3>Contact List</h3>
+    <ul class="list-group row" ng-repeat="contact in home.contacts">
+      <li class="list-group-item">
+        <div class="col-md-8">
+          <h4>{{contact.firstname}}</h4>
+          <p>{{contact.email}}</p>
+        </div>
+        <div class="col-sm-2 col-md-2"> <span class="glyphicon glyphicon-remove-sign" ng-click="deleteReceiver($index)"></span> </div>
+
+      </li>
     </ul>
 
   </div>

@@ -46,6 +46,10 @@
                 })
             }
 
+            // self.SigninStatus = function() {
+            //     return gapi.auth2.getAuthInstance().isSignedIn.get();
+            // }
+
             self.updateSigninStatus = function (isSignedIn) {
                 console.log("updateSigninStatus");
                 console.log(isSignedIn);
@@ -75,6 +79,7 @@
 
             self.makeApiCall = function () {
                 console.log("makeApiCall");
+                //TO DO
             }
 
             self.getBasicProfile = function () {
@@ -87,7 +92,6 @@
                     'email': GoogleUser.getBasicProfile().getEmail()
                 };
             }
-
 
 
             // self.sendMessage = function(userId, email, callback) {

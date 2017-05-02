@@ -6,7 +6,8 @@
         .factory('dataFactory', function(){
             let factory = {
                 "profile": {},
-                "email": {}
+                "ReceiverList":[],
+                "CcList":[]
             };
 
             factory.getProfile = function(){
@@ -16,13 +17,17 @@
                 factory.profile = profile;
 
             }
-            factory.getEmail = function(){
-                return factory.email;
+            factory.getCcList = function(){
+                return factory.Cclist;
             }
-            factory.setEmail = function(email){
-                factory.email = email;
+            factory.setCcList = function(CcList){
+                factory.CcList = CcList;
+            }
+            factory.getReceiverList = function(receiverlist){
+                factory.ReceiverList = receiverlist
+            }
 
-            }
+
 
             return factory;
 
