@@ -12,11 +12,15 @@
 
     app.controller("navigationController", ["$scope", "$location","$window","googleService", function ($scope, $location,$window,googleService) {
         var self = this;
-        console.log(self);
-        console.log($location);
+        //console.log(self);
+        //console.log($location);
         self.$location = $location;
-        $scope.login = function(){
-            
+        $window.onload = function(){
+            //alert("onload");
+            googleService.handleClientLoad();
+
+        };
+        $scope.login = function(){          
             googleService.handleAuthClick();
         }
 
