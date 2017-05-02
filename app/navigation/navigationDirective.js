@@ -10,7 +10,7 @@
         }
     });
 
-    app.controller("navigationController", ["$scope", "$location","$window","googleService", function ($scope, $location,$window,googleService) {
+    app.controller("navigationController", ["$scope", "$location","googleService", "dataFactory", function ($scope, $location,googleService,dataFactory) {
         var self = this;
         //console.log(self);
         //console.log($location);
@@ -25,7 +25,10 @@
         $scope.login = function($event){          
             googleService.handleAuthClick($event);
             //googleService.handleAuthClick();
-            self.userProfile = googleService.getBasicProfile();
+            dataFactory.setProfile(googleService.getBasicProfile());
+            console.log("dataFactory:"+dataFactory["profile"]);
+            self.userProfile = dataFactory["profile"];
+            $event.preventDefault();
             self.isLogin = true;
         }
 
@@ -35,6 +38,12 @@
             //TODO call logout service
             $event.preventDefault();
             self.isLogin = false;
+        }
+        $scope.switchUser = function($event){
+            googleService.revokeAllScopes();
+            $event.preventDefault();
+            self.isLogin = false;
+
         }
 
 
