@@ -8,13 +8,14 @@
             let clientId = '113580546624-h19v75qfojgcqt8bskd5d9utck254teq.apps.googleusercontent.com';
             let apiKey = 'AIzaSyCzhQV-jOIWWK_YS45Qtq8xxtCPELP9wWE';
             let scopes =
-                'https://www.googleapis.com/auth/userinfo.profile'
-            'https://www.googleapis.com/auth/gmail.send';
+                'https://www.googleapis.com/auth/gmail.readonly ' +
+                'https://www.googleapis.com/auth/gmail.send';
 
             let self = this;
             self.handleClientLoad = function () {
                 gapi.client.setApiKey(apiKey);
-                window.setTimeout(self.checkAuth, 1);
+                self.initClient();
+                //window.setTimeout(self.checkAuth, 1);
             };
 
             self.checkAuth = function () {
@@ -25,14 +26,39 @@
                 }, self.handleAuthResult);
             };
 
-            self.handleAuthClick = function () {
-                gapi.auth.authorize({
-                    client_id: clientId,
-                    scope: scopes,
-                    immediate: false
-                }, self.handleAuthResult);
-                return false;
+            self.initClient = function () {
+                gapi.client.init({
+                    'apiKey': apiKey,
+                    //'discoveryDocs': [],
+                    'clientId': clientId,
+                    'scope': scopes
+                }).then(function () {
+                    gapi.auth2.getAuthInstance().isSingedIn.listen(updateSigninStatus);
+                    updateSigninStatus(gapi.auth2.getAuthInstance().isSingedIn.get());
+                    authorizeButton.onclick = self.handleAuthClick;
+                    signoutButton.onclick = self.handleSignoutClick;
+                });
             };
+
+            self.updateSigninStatus = function(isSignedIn){
+                alert(isSignedIn);
+            }
+
+            self.handleAuthClick = function(event) {
+                gapi.auth2.getAuthInstance().signIn();
+            }
+            self.handleSignoutClick = function(event) {
+                gapi.auth2.getAuthInstance().signOut();
+            }
+
+            // self.handleAuthClick = function () {
+            //     gapi.auth.authorize({
+            //         client_id: clientId,
+            //         scope: scopes,
+            //         immediate: false
+            //     }, self.handleAuthResult);
+            //     return false;
+            // };
 
             self.handleAuthResult = function (authResult) {
                 if (authResult && !authResult.error) {
@@ -49,26 +75,25 @@
             self.displayInbox = function () {
 
 
-                var request = gapi.client.gmail.users.messages.list({
-                    'userId': 'me',
-                    'labelIds': 'INBOX',
-                    'maxResults': 10
-                });
-                request.execute(function (response) {
-                    $.each(response.messages, function () {
-                        var messageRequest = gapi.client.gmail.users.messages.get({
-                            'userId': 'me',
-                            'id': this.id
-                        });
-                        console.log(messageRequest);
-                        //messageRequest.execute(appendMessageRow);
-                    });
-                });
+                // var request = gapi.client.gmail.users.messages.list({
+                //     'userId': 'me',
+                //     'labelIds': 'INBOX',
+                //     'maxResults': 10
+                // });
+                // request.execute(function (response) {
+                //     $.each(response.messages, function () {
+                //         var messageRequest = gapi.client.gmail.users.messages.get({
+                //             'userId': 'me',
+                //             'id': this.id
+                //         });
+                //         console.log(messageRequest);
+                //         //messageRequest.execute(appendMessageRow);
+                //     });
+                // });
             }
 
 
-            self.sendMessage = function(headers_obj, message,callback)
-            {
+            self.sendMessage = function (headers_obj, message, callback) {
                 console.log("sendMessage");
                 var email = '';
                 for (var header in headers_obj)
@@ -84,7 +109,7 @@
                 sendRequest.execute(callback)
             }
 
-            self.doneSending = function(){
+            self.doneSending = function () {
                 alert("email is sented");
             }
 
