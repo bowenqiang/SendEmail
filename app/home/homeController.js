@@ -22,7 +22,8 @@
             $scope.loadLocalContact = function(){
                 $http.get("contactlist.json").then(function(response){
                     self.contacts = response.data;
-                    console.log("contact list: "+self.contacts);
+                    console.log("contact list: ");
+                    console.log(self.contacts);
 
 
                 },function(){
