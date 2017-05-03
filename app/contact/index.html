@@ -1,17 +1,19 @@
 <div class="row">
     <div class="col-md-3">
-        <ul class="list-group" ng-repeat="contact in contactList">
-            <li class="list-group-item" ng-click="showDetail($index)">
-                <h4>{{contact.firstname+" "+contact.familyname}}</h4>
-                <p>{{contact.email}}</p>
+
+        <label>Search</label>
+        <input class="visible-xs-block visible-md-inline visible-lg-inline" ng-model="search.familyname" type="text" placeholder="Search by Family Name">
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-info" ng-repeat="contact in contactList | filter:search:strict" ng-click="listClick($index)">
+                <h3>{{contact.firstname+" "+contact.familyname}}</h3>
+                <p>{{contact.email}} </p>
             </li>
         </ul>
-
-
     </div>
     <div class="col-md-6">
         this is Add/Edit section
-        <form name="addForm" novalidate>
+        <button type=""></button>
+        <form name="addForm" novalidate ng-hide="true">
             <div class="row">
                 <div class="form-group col-md-6">
                     <label for="firstName">First Name</label>
@@ -36,6 +38,34 @@
             </div>
             <div>
                 <button ng-disabled="addForm.$invalid" class="btn btn-default" ng-click="addContact()">Add</button>
+            </div>
+        </form>
+
+        <form name="addForm" novalidate ng-hide="false">
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="firstName">First Name</label>
+                    <input type="text" class="form-control" id="firstName" placeholder="First Name" ng-model="contact.firstname" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="familyName">Family Name</label>
+                    <input type="text" class="form-control" id="firstName" placeholder="Family Name" ng-model="contact.familyname" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" placeholder="Title" ng-model="contact.title">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="exampleInputEmail2">Email</label>
+                <input type="email" class="form-control" id="email" placeholder="example@example.com" ng-model="contact.email" required>
+            </div>
+            <div>
+                <button ng-disabled="addForm.$invalid" class="btn btn-default" ng-click="addContact()">Edit</button>
             </div>
         </form>
     </div>

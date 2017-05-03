@@ -8,7 +8,8 @@
             $scope.contactList = [];
             $scope.userProfile = {};
             //Initialize Firebase     
-            $scope.contactList = [];
+            $scope.receiverList = [];
+            $scope.ccList = [];
             let config = {
                 apiKey: "AIzaSyDQAH8rJjuen65aqrpBFOyTi5TRGyWVPPM",
                 authDomain: "crack-descent-166316.firebaseapp.com",
@@ -17,11 +18,7 @@
                 storageBucket: "crack-descent-166316.appspot.com",
                 messagingSenderId: "113580546624"
             };
-            // let testdata = {
-            //     "firstname": "zhazha",
-            //     "familyname": "xiao",
-            //     "email": "zhazha@gmail.com"
-            // };
+
             firebase.initializeApp(config);
             let databasse = firebase.database();
             let ref = {};
@@ -36,18 +33,11 @@
                 $scope.contact = {};
             }
 
-
-
             function gotData(data) {
                 $timeout(function(){
                 let rawData = data.val();
                 $scope.contactList = processRawData(rawData);
-                console.log("contactlist: ");
-                console.log($scope.contactList);
-
                 });
-
-                // $scope.$digest();
             }
 
             function errData(err) {
@@ -63,33 +53,9 @@
                 return cleanData;
             }
 
-            // $scope.addContact = function(){
-            //     console.log("AddContact");
-            //     ref.push($scope.contact);
-            // }
-
-            //ref.push(testdata);
-
-            // $scope.addContact = function(){
-            //     $scope.contactList.push($scope.contact);
-            //     $scope.contact={};
-            // }
-
-            // $scope.showDetail = function(){
-            //     alert("you clicked");
-
-            // }
-
-            // $scope.importClick = function(){
-
-            // }
-
-            // $scope.exportClick = function(){
-
-            // }
-
-
-
+            $scope.listClick = function(index){
+                alert("index");
+            }
 
         }])
 
