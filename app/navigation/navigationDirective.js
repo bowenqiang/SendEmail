@@ -53,6 +53,7 @@
             do_first(function () {
                 do_later();
             });
+            $rootScope.initContactPage();
             $event.preventDefault();
 
         }

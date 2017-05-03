@@ -23,6 +23,9 @@
             factory.setCcList = function(CcList){
                 factory.CcList = CcList;
             }
+            factory.setReceiverList = function(receiverlist){
+                factory.ReceiverList = receiverlist
+            }
             factory.getReceiverList = function(receiverlist){
                 factory.ReceiverList = receiverlist
             }

@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-8">
+  <div class="col-md-9">
     <form ng-submit="sendHandler()">
       <div class="modal-body">
         <div class="form-group">
@@ -22,7 +22,7 @@
     </form>
 
   </div>
-  <div class="col-md-4">
+  <!--<div class="col-md-3">
     <button type="" id="load-local-button" class="btn btn-default" ng-click="loadLocalContact()">Load Contact</button>
     <h3>Contact List</h3>
     <ul class="list-group row" ng-repeat="contact in home.contacts">
@@ -36,6 +36,24 @@
       </li>
     </ul>
 
-  </div>
+  </div>-->
+      <div class="col-md-3">
+        To:
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-info" ng-repeat="contact in receiverList">
+                <h3>{{contact.firstname+" "+contact.familyname}}</h3>
+                <p>{{contact.email}} </p>
+            </li>
+        </ul>
+
+
+        Cc:
+        <ul class="list-group">
+            <li class="list-group-item list-group-item-info" ng-repeat="contact in ccList">
+                <h3>{{contact.firstname+" "+contact.familyname}}</h3>
+                <p>{{contact.email}} </p>
+            </li>
+        </ul>
+    </div>
 
 </div>

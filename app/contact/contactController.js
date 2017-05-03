@@ -5,38 +5,51 @@
         .module('myApp')
         .controller('contactController', ["$scope", "$timeout", "$rootScope", "dataFactory", function ($scope, $timeout, $rootScope, dataFactory) {
             let self = this;
+            let ref = {};
+            $scope.iisAddformShown = false;
             $scope.contactList = [];
             $scope.userProfile = {};
-            //Initialize Firebase     
+                
             $scope.receiverList = [];
             $scope.ccList = [];
-            let config = {
-                apiKey: "AIzaSyDQAH8rJjuen65aqrpBFOyTi5TRGyWVPPM",
-                authDomain: "crack-descent-166316.firebaseapp.com",
-                databaseURL: "https://crack-descent-166316.firebaseio.com",
-                projectId: "crack-descent-166316",
-                storageBucket: "crack-descent-166316.appspot.com",
-                messagingSenderId: "113580546624"
-            };
 
-            firebase.initializeApp(config);
-            let databasse = firebase.database();
-            let ref = {};
-            $scope.userProfile = dataFactory.getProfile();
-            console.log("user's id" + $scope.userProfile['id']);
-            ref = databasse.ref($scope.userProfile['id']);
-            ref.on('value', gotData, errData);
+            $rootScope.initContactPage = function() {
+                console.log("contact initl");
+                 //Initialize Firebase
+                let config = {
+                    apiKey: "AIzaSyDQAH8rJjuen65aqrpBFOyTi5TRGyWVPPM",
+                    authDomain: "crack-descent-166316.firebaseapp.com",
+                    databaseURL: "https://crack-descent-166316.firebaseio.com",
+                    projectId: "crack-descent-166316",
+                    storageBucket: "crack-descent-166316.appspot.com",
+                    messagingSenderId: "113580546624"
+                };                 
+                if($scope.userProfile!=[])
+                {
+                firebase.initializeApp(config);
+                let databasse = firebase.database();
+                $scope.userProfile = dataFactory.getProfile();
+                console.log("user's id" + $scope.userProfile['id']);
+                ref = databasse.ref($scope.userProfile['id']);
+                ref.on('value', gotData, errData);
 
+                }
+            }
+            //ref.on('value', gotData, errData);
 
             $scope.addContact = function () {
                 ref.push($scope.contact);
                 $scope.contact = {};
             }
 
+            $scope.editContact = function () {
+
+            }
+
             function gotData(data) {
-                $timeout(function(){
-                let rawData = data.val();
-                $scope.contactList = processRawData(rawData);
+                $timeout(function () {
+                    let rawData = data.val();
+                    $scope.contactList = processRawData(rawData);
                 });
             }
 
@@ -53,8 +66,29 @@
                 return cleanData;
             }
 
-            $scope.listClick = function(index){
-                alert("index");
+            $scope.listClick = function (index) {
+                //alert(index);
+                $scope.contactDetail = $scope.contactList[index];
+            }
+
+            $scope.showAddForm = function () {
+                $scope.isAddformShown = true;
+            }
+
+            $scope.addToList = function () {
+                $scope.receiverList.push($scope.contactDetail);
+                $scope.isAddformShown = false;
+
+
+            }
+
+            $scope.addCcList = function () {
+                $scope.ccList.push($scope.contactDetail);
+            }
+
+            $scope.confirmList = function () {
+                dataFactory.setCcList($scope.ccList);
+                dataFactory.setReceiverList($scope.receiverList);
             }
 
         }])

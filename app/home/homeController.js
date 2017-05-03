@@ -5,8 +5,16 @@
         .module('myApp')
         .controller('homeController', ["$scope","$http","googleService","$rootScope","dataFactory",function($scope,$http,googleService,$rootScope,dataFactory){
             let self=this;
-            self.ccList = [];
-            let receiverList = [];
+            $scope.ccList = [];
+            $scope.receiverList = [];
+
+            function initPage(){
+                console.log("home init");
+                $scope.ccList=dataFactory.getCcList();
+                $scope.receiverList=dataFactory.getReceiverList();
+            }
+
+            initPage();
             
             $scope.sendEmail = function(){
                 
