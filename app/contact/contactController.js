@@ -3,9 +3,11 @@
 
     angular
         .module('myApp')
-        .controller('contactController', ["$scope", "$rootScope", "dataFactory", function ($scope, $rootScope, dataFactory) {
-            //Initialize Firebase
+        .controller('contactController', ["$scope", "$timeout", "$rootScope", "dataFactory", function ($scope, $timeout, $rootScope, dataFactory) {
             let self = this;
+            $scope.contactList = [];
+            $scope.userProfile = {};
+            //Initialize Firebase     
             $scope.contactList = [];
             let config = {
                 apiKey: "AIzaSyDQAH8rJjuen65aqrpBFOyTi5TRGyWVPPM",
@@ -15,25 +17,37 @@
                 storageBucket: "crack-descent-166316.appspot.com",
                 messagingSenderId: "113580546624"
             };
-            let testdata = {
-                "firstname": "zhazha",
-                "familyname": "xiao",
-                "email": "zhazha@gmail.com"
-            };
+            // let testdata = {
+            //     "firstname": "zhazha",
+            //     "familyname": "xiao",
+            //     "email": "zhazha@gmail.com"
+            // };
             firebase.initializeApp(config);
             let databasse = firebase.database();
-            let userProfile = dataFactory.getProfile();
-
-            let ref = databasse.ref(userProfile['id']);
-            
+            let ref = {};
+            $scope.userProfile = dataFactory.getProfile();
+            console.log("user's id" + $scope.userProfile['id']);
+            ref = databasse.ref($scope.userProfile['id']);
             ref.on('value', gotData, errData);
 
+
+            $scope.addContact = function () {
+                ref.push($scope.contact);
+                $scope.contact = {};
+            }
+
+
+
             function gotData(data) {
+                $timeout(function(){
                 let rawData = data.val();
                 $scope.contactList = processRawData(rawData);
                 console.log("contactlist: ");
                 console.log($scope.contactList);
-                //$scope.$apply();
+
+                });
+
+                // $scope.$digest();
             }
 
             function errData(err) {
@@ -49,16 +63,30 @@
                 return cleanData;
             }
 
-            $scope.addContact = function(){
-                console.log("AddContact");
-                ref.push($scope.contact);
-
-
-            }
-
-
+            // $scope.addContact = function(){
+            //     console.log("AddContact");
+            //     ref.push($scope.contact);
+            // }
 
             //ref.push(testdata);
+
+            // $scope.addContact = function(){
+            //     $scope.contactList.push($scope.contact);
+            //     $scope.contact={};
+            // }
+
+            // $scope.showDetail = function(){
+            //     alert("you clicked");
+
+            // }
+
+            // $scope.importClick = function(){
+
+            // }
+
+            // $scope.exportClick = function(){
+
+            // }
 
 
 

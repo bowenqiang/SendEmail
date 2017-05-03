@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     angular.module("myApp")
-        .service('googleService', function () {
+        .service('googleService', function ($rootScope) {
             // let clientId = '{CLIENT_ID}',
             //     apiKey = '{API_KEY}',
             //     scopes = '{SCOPES}';
@@ -46,18 +46,20 @@
                 })
             }
 
-            // self.SigninStatus = function() {
-            //     return gapi.auth2.getAuthInstance().isSignedIn.get();
-            // }
+            self.signinStatus = function() {
+                
+                return Object.keys(GoogleUser).length ===0 && GoogleUser.constructor === Object? false:true;
+            }
 
             self.updateSigninStatus = function (isSignedIn) {
                 console.log("updateSigninStatus");
                 console.log(isSignedIn);
                 if (isSignedIn) {
                     console.log("signin successfully");
-                    self.makeApiCall();
+                    self.loginCall();
                 } else {
                     console.log("failed to signin");
+                    self.logoutCall();
                 }
             }
 
@@ -70,17 +72,24 @@
             self.handleSignoutClick = function (event) {
                 console.log("handleSignoutClick");
                 gapi.auth2.getAuthInstance().signOut();
+                GoogleUser = {};
 
 
             }
             self.revokeAllScopes = function () {
-                gapi.auth2.getAuthInstance().disconnect();
+                GoogleUser.disconnect();
             }
 
-            self.makeApiCall = function () {
-                console.log("makeApiCall");
-                //TO DO
+            self.loginCall = function () {
+
+
             }
+
+
+            self.logoutCall = function(){
+
+            }
+
 
             self.getBasicProfile = function () {
                 return {
