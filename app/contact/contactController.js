@@ -105,8 +105,6 @@
             $scope.addToList = function () {
                 $scope.receiverList.push($scope.contactDetail);
                 //$scope.isAddformShown = false;
-
-
             }
 
             $scope.addCcList = function () {
@@ -114,6 +112,13 @@
             }
 
             $scope.confirmList = function () {
+                dataFactory.setCcList($scope.ccList);
+                dataFactory.setReceiverList($scope.receiverList);
+            }
+
+            $scope.cancelList = function(){
+                $scope.ccList = [];
+                $scope.receiverList = [];
                 dataFactory.setCcList($scope.ccList);
                 dataFactory.setReceiverList($scope.receiverList);
             }

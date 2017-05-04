@@ -36,7 +36,7 @@
       <div class="col-md-3">
         To:
         <ul class="list-group">
-            <li class="list-group-item list-group-item-info" ng-repeat="contact in receiverList">
+            <li class="list-group-item list-group-item-success" ng-repeat="contact in receiverList">
                 <h3>{{contact.firstname+" "+contact.familyname}}</h3>
                 <p>{{contact.email}} </p>
             </li>
@@ -45,7 +45,7 @@
 
         Cc:
         <ul class="list-group">
-            <li class="list-group-item list-group-item-info" ng-repeat="contact in ccList">
+            <li class="list-group-item list-group-item-warning" ng-repeat="contact in ccList">
                 <h3>{{contact.firstname+" "+contact.familyname}}</h3>
                 <p>{{contact.email}} </p>
             </li>

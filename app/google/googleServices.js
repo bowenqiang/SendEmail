@@ -129,7 +129,8 @@
                         'raw': window.btoa(email).replace(/\+/g, '-').replace(/\//g, '_')
                     }
                 });
-                sendRequest.execute(callback)
+
+                sendRequest.execute(callback);
             }
 
 
