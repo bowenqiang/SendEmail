@@ -3,7 +3,7 @@
 
     angular
         .module('myApp')
-        .controller('contactController', ["$scope", "$timeout", "$rootScope", "dataFactory", function ($scope, $timeout, $rootScope, dataFactory) {
+        .controller('contactController', ["$scope", "$timeout", "$rootScope", "dataFactory","firebaseFactory", function ($scope, $timeout, $rootScope, dataFactory,firebaseFactory) {
             let self = this;
             let ref = {};
             $scope.isAddformShown = false;
@@ -17,35 +17,49 @@
                 $scope.contactList = dataFactory.getContactList();
                 $scope.ccList = dataFactory.getCcList();
                 $scope.receiverList = dataFactory.getReceiverList();
+                if(firebaseFactory.isRefSet()){
+                    firebaseFactory.readFirebase('value',gotData,errData);
+                }
+                
                 //console.log($scope.contactList);
                 });
                 
-
             }
             selfInit();
+
+            $rootScope.$on("ContactInitEvent",function(){
+                console.log("contact init event");
+                selfInit();
+            });
+
+            $rootScope.$on("LogoutEvent",function(){
+                console.log("logout event");
+                selfInit();
+            })
             
 
-            $rootScope.initContactPage = function () {
-                console.log("contact initl");
-                //Initialize Firebase
-                let config = {
-                    apiKey: "AIzaSyDQAH8rJjuen65aqrpBFOyTi5TRGyWVPPM",
-                    authDomain: "crack-descent-166316.firebaseapp.com",
-                    databaseURL: "https://crack-descent-166316.firebaseio.com",
-                    projectId: "crack-descent-166316",
-                    storageBucket: "crack-descent-166316.appspot.com",
-                    messagingSenderId: "113580546624"
-                };
-                if ($scope.userProfile != [])
-                    firebase.initializeApp(config);
-                let databasse = firebase.database();
-                $scope.userProfile = dataFactory.getProfile();
-                console.log("user's id" + $scope.userProfile['id']);
-                ref = databasse.ref($scope.userProfile['id']);
-                ref.on('value', gotData, errData);
+            // $rootScope.initContactPage = function () {
+            //     console.log("contact initl");
+            //     //Initialize Firebase
+            //     let config = {
+            //         apiKey: "AIzaSyDQAH8rJjuen65aqrpBFOyTi5TRGyWVPPM",
+            //         authDomain: "crack-descent-166316.firebaseapp.com",
+            //         databaseURL: "https://crack-descent-166316.firebaseio.com",
+            //         projectId: "crack-descent-166316",
+            //         storageBucket: "crack-descent-166316.appspot.com",
+            //         messagingSenderId: "113580546624"
+            //     };
+            //     if ($scope.userProfile != [])
+            //         firebase.initializeApp(config);
+            //     let databasse = firebase.database();
+            //     $scope.userProfile = dataFactory.getProfile();
+            //     console.log("user's id" + $scope.userProfile['id']);
+            //     ref = databasse.ref($scope.userProfile['id']);
+            //     ref.on('value', gotData, errData);
 
     
-            }
+            // }
+
             //ref.on('value', gotData, errData);
 
             $scope.addContact = function () {

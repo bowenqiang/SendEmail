@@ -39,6 +39,13 @@
                 return factory.ContactList;
             }
 
+            factory.clearData = function(){
+                factory.profile = {};
+                factory.ReceiverList = [];
+                factory.CcList = [];
+                factory.ContactList = [];
+            }
+
 
 
 

@@ -10,7 +10,7 @@
         }
     });
 
-    app.controller("navigationController", ["$scope", "$location", "googleService", "$rootScope", "dataFactory", function ($scope, $location, googleService, $rootScope, dataFactory) {
+    app.controller("navigationController", ["$scope", "$location", "googleService", "$rootScope", "dataFactory","firebaseFactory", "$timeout",function ($scope, $location, googleService, $rootScope, dataFactory,firebaseFactory,$timeout) {
         var self = this;
         //console.log(self);
         //console.log($location);
@@ -25,11 +25,14 @@
             self.isLogin = googleService.signinStatus();
 
         };
+
+
         $scope.login = function ($event) {
 
             let authPromise = new Promise(function (resolve, reject) {
                 console.log("Enter Promoise");
-                googleService.handleAuthClick($event);
+                $timeout(googleService.handleAuthClick($event));
+                
                 resolve();
             });
 
@@ -38,7 +41,11 @@
                 console.log("navi profile" + self.userProfile['email']);
                 dataFactory.setProfile(self.userProfile);
                 self.isLogin = googleService.signinStatus();
-                $rootScope.initContactPage();
+                //$rootScope.initContactPage();
+                firebaseFactory.initFirebase(self.userProfile['id']);
+
+                $rootScope.$broadcast("ContactInitEvent");
+
                 $event.preventDefault();
             });
 
@@ -51,6 +58,8 @@
             //TODO call logout service
             $event.preventDefault();
             self.isLogin = googleService.signinStatus();
+            dataFactory.clearData();
+            $rootScope.$broadcast("LogoutEvent");
         }
         //TO DO fix switchUser 
         $scope.switchUser = function ($event) {

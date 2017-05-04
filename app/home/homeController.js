@@ -18,14 +18,12 @@
             
             $scope.sendEmail = function(){
                 
-                //console.log("email: "+$rootScope.userProfile["email"]); 
                 let emailHead = {
                     'To': listToArray($scope.receiverList),
                     'Cc': listToArray($scope.ccList),
                     'Subject': self.email['Subject']
                 }
                 googleService.sendMessage(emailHead,self.email['message'],function(){ alert("email sent!")});
-                //alert("sent");
             };
 
             function listToArray(lists){
