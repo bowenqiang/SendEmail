@@ -21,40 +21,26 @@
             // console.log("onload");
             // googleService.handleClientLoad();
 
-            function do_first(callback) {
-                googleService.handleClientLoad();
-                callback && callback();
-            }
-            function do_later() {
-                 self.isLogin = googleService.signinStatus();
-            }
-            do_first(function () {
-                do_later();
-            });
-
+            googleService.handleClientLoad();
+            self.isLogin = googleService.signinStatus();
 
         };
         $scope.login = function ($event) {
 
-
-
-            function do_first(callback) {
+            let authPromise = new Promise(function (resolve, reject) {
+                console.log("Enter Promoise");
                 googleService.handleAuthClick($event);
-                callback && callback();
+                resolve();
+            });
 
-            }
-            function do_later() {
+            authPromise.then(function () {
                 self.userProfile = googleService.getBasicProfile();
                 console.log("navi profile" + self.userProfile['email']);
-
                 dataFactory.setProfile(self.userProfile);
                 self.isLogin = googleService.signinStatus();
-            }
-            do_first(function () {
-                do_later();
+                $rootScope.initContactPage();
+                $event.preventDefault();
             });
-            $rootScope.initContactPage();
-            $event.preventDefault();
 
         }
 
@@ -73,19 +59,6 @@
             self.isLogin = googleService.signinStatus();
 
         }
-
-
-
-        // function doAfterLogin() {
-        //     console.log("Do after login");
-        //     self.isLogin = true;
-        // }
-
-        // function doAfterLogout() {
-        //     console.log("Do after logout");
-        //     self.isLogin = false;
-        // }
-
 
     }]);
 

@@ -17,6 +17,8 @@
             this.firebaseInit = function(_ref){
                 firebase.initializeApp(config);
                 ref = database.ref(_ref)
+                
+
             }
             
 

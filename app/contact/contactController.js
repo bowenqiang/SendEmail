@@ -6,10 +6,9 @@
         .controller('contactController', ["$scope", "$timeout", "$rootScope", "dataFactory", function ($scope, $timeout, $rootScope, dataFactory) {
             let self = this;
             let ref = {};
-            $scope.iisAddformShown = false;
+            $scope.isAddformShown = false;
             $scope.contactList = [];
             $scope.userProfile = {};
-
             $scope.receiverList = [];
             $scope.ccList = [];
             function selfInit(){
