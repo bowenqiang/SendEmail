@@ -20,37 +20,22 @@
                 
                 //console.log("email: "+$rootScope.userProfile["email"]); 
                 let emailHead = {
-                    'To': self.email['To'],
+                    'To': listToArray($scope.receiverList),
+                    'Cc': listToArray($scope.ccList),
                     'Subject': self.email['Subject']
                 }
                 googleService.sendMessage(emailHead,self.email['message'],function(){ alert("email sent!")});
                 //alert("sent");
             };
 
-            // $scope.loadLocalContact = function(){
-            //     $http.get("contactlist.json").then(function(response){
-            //         self.contacts = response.data;
-            //         console.log("contact list: ");
-            //         console.log(self.contacts);
-
-
-            //     },function(){
-            //         console.log("failed to load contact list");
-            //     });
-
-            // }
-
-            $scope.sendHandler = function(){
-                for(let contact of $scope.receiverList){
-                    let emailHead = {
-                        'To': contact.email,
-                        'Subject': self.email['Subject']
-                    }
-                    googleService.sendMessage(emailHead,self.email['message'],function(){
-                        console.log("Email to "+contact.email+" is sented");
-                    });
+            function listToArray(lists){
+                let array=[];               
+                for(let list of lists ){
+                    array.push(list["email"]);
                 }
+                return array;
             }
+
         }]);
 
 }());
