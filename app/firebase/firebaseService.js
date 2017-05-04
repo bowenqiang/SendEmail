@@ -14,18 +14,11 @@
                 messagingSenderId: "113580546624"
             };
 
-            let ref = "";
-
             this.firebaseInit = function(_ref){
                 firebase.initializeApp(config);
                 ref = database.ref(_ref)
             }
             
-            this.firebasePush = function(data){
-                ref.push(data);
-            }
-
-
 
         })
     

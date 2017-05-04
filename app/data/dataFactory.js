@@ -7,7 +7,8 @@
             let factory = {
                 "profile": {},
                 "ReceiverList":[],
-                "CcList":[]
+                "CcList":[],
+                "ContactList":[]
             };
 
             factory.getProfile = function(){
@@ -18,7 +19,7 @@
 
             }
             factory.getCcList = function(){
-                return factory.Cclist;
+                return factory.CcList;
             }
             factory.setCcList = function(CcList){
                 factory.CcList = CcList;
@@ -26,9 +27,20 @@
             factory.setReceiverList = function(receiverlist){
                 factory.ReceiverList = receiverlist
             }
-            factory.getReceiverList = function(receiverlist){
-                factory.ReceiverList = receiverlist
+            factory.getReceiverList = function(){
+                return factory.ReceiverList;
             }
+
+            factory.setContactList = function(contactlist){
+                factory.ContactList = contactlist
+            }
+
+            factory.getContactList = function(receiverlist){
+                return factory.ContactList;
+            }
+
+
+
 
 
 

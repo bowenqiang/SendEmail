@@ -9,13 +9,26 @@
             $scope.iisAddformShown = false;
             $scope.contactList = [];
             $scope.userProfile = {};
-                
+
             $scope.receiverList = [];
             $scope.ccList = [];
+            function selfInit(){
+                $timeout(function(){
+                    console.log("Self Init");
+                $scope.contactList = dataFactory.getContactList();
+                $scope.ccList = dataFactory.getCcList();
+                $scope.receiverList = dataFactory.getReceiverList();
+                //console.log($scope.contactList);
+                });
+                
 
-            $rootScope.initContactPage = function() {
+            }
+            selfInit();
+            
+
+            $rootScope.initContactPage = function () {
                 console.log("contact initl");
-                 //Initialize Firebase
+                //Initialize Firebase
                 let config = {
                     apiKey: "AIzaSyDQAH8rJjuen65aqrpBFOyTi5TRGyWVPPM",
                     authDomain: "crack-descent-166316.firebaseapp.com",
@@ -23,17 +36,16 @@
                     projectId: "crack-descent-166316",
                     storageBucket: "crack-descent-166316.appspot.com",
                     messagingSenderId: "113580546624"
-                };                 
-                if($scope.userProfile!=[])
-                {
-                firebase.initializeApp(config);
+                };
+                if ($scope.userProfile != [])
+                    firebase.initializeApp(config);
                 let databasse = firebase.database();
                 $scope.userProfile = dataFactory.getProfile();
                 console.log("user's id" + $scope.userProfile['id']);
                 ref = databasse.ref($scope.userProfile['id']);
                 ref.on('value', gotData, errData);
 
-                }
+    
             }
             //ref.on('value', gotData, errData);
 
@@ -50,6 +62,7 @@
                 $timeout(function () {
                     let rawData = data.val();
                     $scope.contactList = processRawData(rawData);
+                    dataFactory.setContactList($scope.contactList);
                 });
             }
 
@@ -68,6 +81,7 @@
 
             $scope.listClick = function (index) {
                 //alert(index);
+                $scope.isAddformShown = false;
                 $scope.contactDetail = $scope.contactList[index];
             }
 
@@ -77,7 +91,7 @@
 
             $scope.addToList = function () {
                 $scope.receiverList.push($scope.contactDetail);
-                $scope.isAddformShown = false;
+                //$scope.isAddformShown = false;
 
 
             }

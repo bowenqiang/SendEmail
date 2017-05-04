@@ -27,21 +27,21 @@
                 //alert("sent");
             };
 
-            $scope.loadLocalContact = function(){
-                $http.get("contactlist.json").then(function(response){
-                    self.contacts = response.data;
-                    console.log("contact list: ");
-                    console.log(self.contacts);
+            // $scope.loadLocalContact = function(){
+            //     $http.get("contactlist.json").then(function(response){
+            //         self.contacts = response.data;
+            //         console.log("contact list: ");
+            //         console.log(self.contacts);
 
 
-                },function(){
-                    console.log("failed to load contact list");
-                });
+            //     },function(){
+            //         console.log("failed to load contact list");
+            //     });
 
-            }
+            // }
 
             $scope.sendHandler = function(){
-                for(let contact of self.contacts){
+                for(let contact of $scope.receiverList){
                     let emailHead = {
                         'To': contact.email,
                         'Subject': self.email['Subject']
@@ -51,19 +51,6 @@
                     });
                 }
             }
-
-            $scope.deleteReceiver = function(index){
-                //TO Do
-
-            }
-
-
-
-
-
-
-
-
         }]);
 
 }());
