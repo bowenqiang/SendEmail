@@ -33,6 +33,22 @@
                 return Object.keys(factory.ref).length ===0 && factory.ref.constructor === Object? false:true;
             }
 
+            factory.push = function(data){
+                factory.ref.push(data);
+            }
+
+            factory.remove = function(target,success,error){
+                factory.ref.child(target).remove()
+                .then(success)
+                .catch(error);
+            }
+
+            factory.set = function(target,data,success,error){
+                factory.ref.child(target).set(data)
+                .then(success)
+                .catch(error);
+            }
+
 
 
             return factory;

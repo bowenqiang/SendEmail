@@ -63,11 +63,35 @@
             //ref.on('value', gotData, errData);
 
             $scope.addContact = function () {
-                ref.push($scope.contact);
+                // ref.push($scope.contact);
+                firebaseFactory.push($scope.contact);
                 $scope.contact = {};
             }
 
             $scope.editContact = function () {
+                let key=$scope.contactDetail.key;
+                let data={
+                    "firstname":$scope.contactDetail.firstname,
+                    "familyname":$scope.contactDetail.familyname,
+                    "title":$scope.contactDetail.title,
+                    "email":$scope.contactDetail.email,
+                }
+                console.log("edit contact:"+ key);
+                console.log(data);
+                firebaseFactory.set(key,data,function(){alert("Edit Successfully");},function(){alert("Edit failed");})
+
+
+            }
+
+            $scope.deleteContact = function(){
+                let key=$scope.contactDetail.key;
+                firebaseFactory.remove(key,function(){
+                    alert("remove successfully");
+                },function(){
+                    alert("remove failed");
+                })
+                console.log("key:"+key);
+                
 
             }
 
@@ -75,6 +99,8 @@
                 $timeout(function () {
                     let rawData = data.val();
                     $scope.contactList = processRawData(rawData);
+                    console.log("contactList");
+                    console.log($scope.contactList);
                     dataFactory.setContactList($scope.contactList);
                 });
             }
@@ -87,6 +113,7 @@
             function processRawData(rawData) {
                 let cleanData = [];
                 angular.forEach(rawData, function (value, key) {
+                    value.key = key;
                     cleanData.push(value);
                 });
                 return cleanData;
