@@ -7,9 +7,7 @@
             let self=this;
             $scope.ccList = [];
             $scope.receiverList = [];
-
             function initPage(){
-                console.log("home init");
                 $scope.ccList=dataFactory.getCcList();
                 $scope.receiverList=dataFactory.getReceiverList();
             }
@@ -18,12 +16,27 @@
             
             $scope.sendEmail = function(){
                 
-                let emailHead = {
-                    'To': listToArray($scope.receiverList),
+                // let emailHead = {
+                //     'To': listToArray($scope.receiverList),
+                //     'Cc': listToArray($scope.ccList),
+                //     'Subject': self.email['Subject']
+                // }
+                // console.log(self.email['message']);
+                // googleService.sendMessage(emailHead,self.email['message'],function(){ alert("email sent!")});
+
+
+                for(let receiver of $scope.receiverList){
+                    let emailHead = {
+                    'To': receiver.email,
                     'Cc': listToArray($scope.ccList),
                     'Subject': self.email['Subject']
                 }
-                googleService.sendMessage(emailHead,self.email['message'],function(){ alert("email sent!")});
+                let processedMail = messageProcess(self.email['message'],receiver);
+                googleService.sendMessage(emailHead,processedMail,function(){ alert("Sent")});
+                
+
+                }
+                
             };
 
             function listToArray(lists){
@@ -32,6 +45,18 @@
                     array.push(list["email"]);
                 }
                 return array;
+            }
+
+            $scope.addTemplateEvent = function(val){
+                $rootScope.$broadcast('addTemplateEvent',val);
+            }
+
+            function messageProcess(message,contact){
+                let msg=message;
+                msg = msg.replace(/\{\@fn\}/g,contact.firstname);
+                msg = msg.replace(/\{\@ln\}/g,contact.familyname);
+                msg = msg.replace(/\{\@tt\}/g,contact.title);
+                return msg;
             }
 
         }]);

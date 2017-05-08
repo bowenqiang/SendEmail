@@ -13,27 +13,22 @@
             $scope.ccList = [];
             function selfInit(){
                 $timeout(function(){
-                    console.log("Self Init");
                 $scope.contactList = dataFactory.getContactList();
                 $scope.ccList = dataFactory.getCcList();
                 $scope.receiverList = dataFactory.getReceiverList();
                 if(firebaseFactory.isRefSet()){
                     firebaseFactory.readFirebase('value',gotData,errData);
                 }
-                
-                //console.log($scope.contactList);
                 });
                 
             }
             selfInit();
 
             $rootScope.$on("ContactInitEvent",function(){
-                console.log("contact init event");
                 selfInit();
             });
 
             $rootScope.$on("LogoutEvent",function(){
-                console.log("logout event");
                 selfInit();
             })
             
@@ -63,7 +58,6 @@
             //ref.on('value', gotData, errData);
 
             $scope.addContact = function () {
-                // ref.push($scope.contact);
                 firebaseFactory.push($scope.contact);
                 $scope.contact = {};
             }
@@ -76,8 +70,6 @@
                     "title":$scope.contactDetail.title,
                     "email":$scope.contactDetail.email,
                 }
-                console.log("edit contact:"+ key);
-                console.log(data);
                 firebaseFactory.set(key,data,function(){alert("Edit Successfully");},function(){alert("Edit failed");})
 
 
@@ -90,24 +82,18 @@
                 },function(){
                     alert("remove failed");
                 })
-                console.log("key:"+key);
-                
-
             }
 
             function gotData(data) {
                 $timeout(function () {
                     let rawData = data.val();
                     $scope.contactList = processRawData(rawData);
-                    console.log("contactList");
-                    console.log($scope.contactList);
                     dataFactory.setContactList($scope.contactList);
                 });
             }
 
             function errData(err) {
                 Console.log("Error!");
-                console.log(err);
             }
 
             function processRawData(rawData) {
@@ -141,6 +127,7 @@
             $scope.confirmList = function () {
                 dataFactory.setCcList($scope.ccList);
                 dataFactory.setReceiverList($scope.receiverList);
+                alert('Please go back to the home page to send emails');
             }
 
             $scope.cancelList = function(){

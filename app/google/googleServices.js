@@ -15,7 +15,6 @@
             let GoogleUser = {};
 
             self.handleClientLoad = function () {
-                console.log("handleClientLoad");
                 let loadGapiClient = new Promise(function (resolve, reject) {
                     gapi.load('client:auth2', resolve);
                 });
@@ -31,14 +30,12 @@
             }
 
             self.initClient = function () {
-                console.log("iniClient");
                 gapi.client.init({
                     apiKey: apiKey,
                     discoveryDocs: [peopleApiDiscovery, "https://www.googleapis.com/discovery/v1/apis/gmail/v1/rest"],
                     clientId: clientId,
                     scope: scopes
                 }).then(function () {
-                    console.log("isSignedIn");
                     gapi.auth2.getAuthInstance().isSignedIn.listen(self.updateSigninStatus);
 
                     self.updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
@@ -101,20 +98,6 @@
                     'email': GoogleUser.getBasicProfile().getEmail()
                 };
             }
-
-
-            // self.sendMessage = function(userId, email, callback) {
-            //     // Using the js-base64 library for encoding:
-            //     // https://www.npmjs.com/package/js-base64
-            //     var base64EncodedEmail = Base64.encodeURI(email);
-            //     var request = gapi.client.gmail.users.messages.send({
-            //         'userId': userId,
-            //         'resource': {
-            //             'raw': base64EncodedEmail
-            //         }
-            //     });
-            //     request.execute(callback);
-            // }
 
             self.sendMessage = function (headers_obj, message, callback) {
                 console.log("sendMessage");

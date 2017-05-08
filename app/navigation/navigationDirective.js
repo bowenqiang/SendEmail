@@ -30,7 +30,6 @@
         $scope.login = function ($event) {
 
             let authPromise = new Promise(function (resolve, reject) {
-                console.log("Enter Promoise");
                 $timeout(googleService.handleAuthClick($event));
                 
                 resolve();
@@ -38,10 +37,10 @@
 
             authPromise.then(function () {
                 self.userProfile = googleService.getBasicProfile();
-                console.log("navi profile" + self.userProfile['email']);
+
                 dataFactory.setProfile(self.userProfile);
                 self.isLogin = googleService.signinStatus();
-                //$rootScope.initContactPage();
+
                 firebaseFactory.initFirebase(self.userProfile['id']);
 
                 $rootScope.$broadcast("ContactInitEvent");
