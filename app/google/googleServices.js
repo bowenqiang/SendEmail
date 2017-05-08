@@ -105,11 +105,16 @@
                 for (var header in headers_obj)
                     email += header += ": " + headers_obj[header] + "\r\n";
                 email += "\r\n" + message;
+                console.log("email:");
                 console.log(email);
+                let base64EncodedEmail = Base64.encodeURI(email);
+                console.log("encode email:");
+                console.log(base64EncodedEmail);
                 var sendRequest = gapi.client.gmail.users.messages.send({
                     'userId': 'me',
                     'resource': {
-                        'raw': window.btoa(email).replace(/\+/g, '-').replace(/\//g, '_')
+                        // 'raw': window.btoa(email).replace(/\+/g, '-').replace(/\//g, '_')
+                        'raw':base64EncodedEmail
                     }
                 });
 
